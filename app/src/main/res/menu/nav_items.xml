@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <group android:checkableBehavior="single">
+        <!--
+                Add menu items here
+                Menu items with icon and Title
+        -->
+        <item
+            android:id="@+id/profile"
+            android:icon="@drawable/ic_baseline_profile_24"
+            android:title="Profile" />
+        <item
+            android:id="@+id/workout"
+            android:icon="@drawable/ic_baseline_workout_24"
+             android:title="Workouts" />
+        <item
+            android:id="@+id/CommunityWorkouts"
+            android:icon="@drawable/ic_baseline_people_24"
+            android:title="Community Workouts" />
+        <item
+            android:id="@+id/logout"
+            android:icon="@drawable/ic_baseline_logout_24"
+             android:title="Logout" />
+    </group>
+
+</menu>

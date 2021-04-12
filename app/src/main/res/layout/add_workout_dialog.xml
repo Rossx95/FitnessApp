@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="#3E80B4"
+    android:orientation="vertical" >
+
+    <TextView
+        android:id="@+id/txt_dia"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_margin="10dp"
+        android:text="Create Workout"
+        android:textColor="@android:color/white"
+        android:textSize="25dp"
+        android:textStyle="bold"/>
+
+
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+android:layout_marginBottom="@dimen/_15sdp"
+        android:layout_marginRight="@dimen/_15sdp"
+        android:layout_marginLeft="@dimen/_15sdp"
+        android:textColorHint="@color/colorDarkBlue">
+
+        <EditText
+            android:id="@+id/workoutNameET"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/workout"
+            android:inputType="textPersonName"
+            android:maxLines="1"
+            android:singleLine="true"
+            android:textColor="@color/colorDarkBlue" />
+
+    </com.google.android.material.textfield.TextInputLayout>
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:background="#3E80B4"
+        android:layout_marginBottom="@dimen/_20sdp"
+        android:orientation="horizontal" >
+
+
+
+        <Button
+            android:id="@+id/btn_cancel"
+            android:layout_width="@dimen/_90sdp"
+            android:layout_height="@dimen/_35sdp"
+            android:background="@android:color/white"
+            android:layout_marginRight="@dimen/_15sdp"
+
+            android:clickable="true"
+            android:text="cancel"
+            android:textColor="#5DBCD2"
+            android:textStyle="bold" />
+        <Button
+            android:id="@+id/btn_create"
+            android:layout_width="@dimen/_90sdp"
+            android:layout_height="@dimen/_35sdp"
+            android:background="@android:color/white"
+            android:layout_marginLeft="@dimen/_15sdp"
+
+            android:clickable="true"
+            android:text="Create"
+            android:textColor="#5DBCD2"
+            android:textStyle="bold" />
+    </LinearLayout>
+
+</LinearLayout>
