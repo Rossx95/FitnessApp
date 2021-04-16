@@ -36,6 +36,17 @@
             android:adjustViewBounds="true"
             android:layout_marginLeft="5dp"
             android:layout_marginRight="5dp"/>
+
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="30dp"
+        android:layout_weight="0"
+        android:orientation="vertical">
+        <SearchView
+            android:id="@+id/searchView"
+            android:layout_width="match_parent"
+            android:layout_height="30dp" />
     </LinearLayout>
     <LinearLayout
         android:layout_width="match_parent"

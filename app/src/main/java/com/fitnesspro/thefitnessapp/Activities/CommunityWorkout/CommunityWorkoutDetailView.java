@@ -73,8 +73,18 @@ public class CommunityWorkoutDetailView extends BaseActivity {
         detail_list_view.setHasFixedSize(true);
         //set layout as LinearLayout
         detail_list_view.setLayoutManager(mLayoutManager);
+
         add_btn = findViewById(R.id.add_btn);
 
+        if(model.getUser_id().equals(auth.getCurrentUser().getUid()))
+        {
+            add_btn.setVisibility(View.VISIBLE);
+
+        }
+        else
+        {
+            add_btn.setVisibility(View.INVISIBLE);
+        }
         review_btn.setOnClickListener(this);
         add_btn.setOnClickListener(this);
         back_btn.setOnClickListener(this);
@@ -167,27 +177,33 @@ public class CommunityWorkoutDetailView extends BaseActivity {
         });
     }
     public void removeWorkout(WorkoutDetailModel detail_model){
-        model.getDetail_list().remove(detail_model);
-        DatabaseReference ref = FirebaseDatabase.getInstance().getReference(Params.COMWORKOUT_KEY).child(model.getId());
-        Map<String, Object> update_map = new HashMap<>();
-        update_map.put("detail_list", model.getDetail_list());
+        if(model.getUser_id().equals(auth.getCurrentUser().getUid())) {
+            model.getDetail_list().remove(detail_model);
+            DatabaseReference ref = FirebaseDatabase.getInstance().getReference(Params.COMWORKOUT_KEY).child(model.getId());
+            Map<String, Object> update_map = new HashMap<>();
+            update_map.put("detail_list", model.getDetail_list());
 
-        refresh.setRefreshing(true);
+            refresh.setRefreshing(true);
 
-        ref.updateChildren(update_map).addOnSuccessListener(new OnSuccessListener<Void>() {
-            public void onSuccess(Void aVoid) {
-                refresh.setRefreshing(false);
-                showMessage("Success to remove !");
-                data_list.remove(detail_model);
-                adapter.notifyDataSetChanged();
+            ref.updateChildren(update_map).addOnSuccessListener(new OnSuccessListener<Void>() {
+                public void onSuccess(Void aVoid) {
+                    refresh.setRefreshing(false);
+                    showMessage("Success to remove !");
+                    data_list.remove(detail_model);
+                    adapter.notifyDataSetChanged();
+                }
+            }).addOnFailureListener(new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull Exception e) {
+                    refresh.setRefreshing(false);
+                    showMessage("Fail to remove !");
+                }
+
+            });
+        }
+        else{
+            showMessage("You didnt create this!");
             }
-        }).addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception e) {
-                refresh.setRefreshing(false);
-                showMessage("Fail to remove !");
-            }
-        });
     }
     //review
     private void review(final float rate, final String description){

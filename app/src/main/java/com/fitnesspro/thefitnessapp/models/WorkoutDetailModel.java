@@ -7,6 +7,7 @@ public class WorkoutDetailModel implements Serializable {
     private String weight;
     private String reps;
     private ExerciseModel exe;
+    private String user_id;
 
     public WorkoutDetailModel(){
 
@@ -18,6 +19,14 @@ public class WorkoutDetailModel implements Serializable {
 
     public String getId() {
         return id;
+    }
+
+    public void setUser_id(String user_id) {
+        this.user_id = user_id;
+    }
+
+    public String getUser_id() {
+        return user_id;
     }
 
     public void setWeight(String weight) {

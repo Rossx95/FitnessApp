@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.SearchView;
 
 import com.fitnesspro.thefitnessapp.Base.BaseActivity;
 import com.fitnesspro.thefitnessapp.R;
@@ -29,7 +30,10 @@ public class ExerciseListActivity extends BaseActivity {
     SwipeRefreshLayout refresh;
     RecyclerView exe_list_view;
     ExerciseAdapter adapter;
+    ExerciseAdapter searchAdapter;
     List<ExerciseModel> data_list;
+    List<ExerciseModel> list;
+    SearchView searchView;
 
     private ValueEventListener add_list_listener;
     private DatabaseReference myRef;
@@ -38,8 +42,8 @@ public class ExerciseListActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_exercise);
-
         initView();
+
     }
 
     @Override
@@ -51,10 +55,15 @@ public class ExerciseListActivity extends BaseActivity {
         back_btn = findViewById(R.id.back);
         refresh = findViewById(R.id.refresh);
         exe_list_view = findViewById(R.id.exe_list);
+        searchView = findViewById(R.id.searchView);
         exe_list_view.setLayoutManager(new LinearLayoutManager(context));
 
         data_list = new ArrayList<>();
         adapter = new ExerciseAdapter(context, data_list);
+        //added
+        searchAdapter = new ExerciseAdapter(context, list);
+
+
         adapter.setOnCallBack(new ExerciseAdapter.OnCallBack() {
             @Override
             public void onDetail(ExerciseModel exercise) {
@@ -79,6 +88,7 @@ public class ExerciseListActivity extends BaseActivity {
         super.onClick(view);
         if(view == back_btn){
             finish();
+
         }
     }
     private void load(){
@@ -133,5 +143,44 @@ public class ExerciseListActivity extends BaseActivity {
                 refresh.setRefreshing(false);
             }
         });
+        //added
+        if(searchView != null)
+        {
+            searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener(){
+
+                @Override
+                public boolean onQueryTextSubmit(String query) {
+                    return false;
+                }
+
+                @Override
+                public boolean onQueryTextChange(String s) {
+                   search(s);
+                    return true;
+                }
+            });
+        }
+    }
+    private void search (String str)
+    {
+        list = new ArrayList<>();
+        for(ExerciseModel object: data_list){
+            if(object.getTitle().toLowerCase().contains(str.toLowerCase()))
+            {
+                list.add(object);
+            }
+
+            ExerciseAdapter adapter = new ExerciseAdapter(context, list);
+            adapter.setOnCallBack(new ExerciseAdapter.OnCallBack() {
+                @Override
+                public void onDetail(ExerciseModel exercise) {
+                    Intent intent = new Intent(context, ExerciseDetailView.class);
+                    intent.putExtra("model", exercise);
+                    startActivity(intent);
+                                      }
+                                  });
+            exe_list_view.setAdapter(adapter);
+
+        }
     }
 }

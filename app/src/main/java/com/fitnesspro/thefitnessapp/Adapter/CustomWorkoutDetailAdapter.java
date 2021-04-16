@@ -11,6 +11,7 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.fitnesspro.thefitnessapp.R;
 import com.fitnesspro.thefitnessapp.models.WorkoutDetailModel;
+import com.google.firebase.auth.FirebaseAuth;
 
 import java.util.List;
 
@@ -21,10 +22,12 @@ public class CustomWorkoutDetailAdapter extends RecyclerView.Adapter<CustomWorko
     private Context context;
     private List<WorkoutDetailModel> list;
     private CustomWorkoutDetailAdapter.OnCallBack onCallBack;
+    private String user_id;
 
     public CustomWorkoutDetailAdapter(Context context, List<WorkoutDetailModel> list){
         this.context = context;
         this.list = list;
+        user_id = FirebaseAuth.getInstance().getCurrentUser().getUid();
     }
 
     public void setOnCallBack(CustomWorkoutDetailAdapter.OnCallBack onCallBack) {
