@@ -29,8 +29,8 @@ import java.util.List;
 import java.util.Map;
 
 public class WorkoutDetailActivity extends BaseActivity {
+    //Initialising Variables
     CustomWorkoutModel model;
-
     ImageView back_btn;
     SwipeRefreshLayout refresh;
     FloatingActionButton add_btn;
@@ -41,14 +41,18 @@ public class WorkoutDetailActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        //set the base view for the activity
         setContentView(R.layout.activity_workout_detail);
+        //call initView method
         initView();
     }
     private void initView(){
+        //Setting model to an object from a different model to be able to access getters and setters
         model = (CustomWorkoutModel)getIntent().getSerializableExtra("model");
-
+        //initialise variables to features on the page
         back_btn = findViewById(R.id.back);
         refresh = findViewById(R.id.refresh);
+        add_btn = findViewById(R.id.add_btn);
         refresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
@@ -56,28 +60,33 @@ public class WorkoutDetailActivity extends BaseActivity {
             }
         });
         LinearLayoutManager mLayoutManager = new LinearLayoutManager(this);
-        //this will load the items from bottom means newest first
+        //Loads the items, newest first.
         mLayoutManager.setReverseLayout(true);
         mLayoutManager.setStackFromEnd(true);
-        //RecyclerView
+        //Setting RecyclerView variable to RecyclerView in xml
         detail_list_view = findViewById(R.id.detail_list);
         detail_list_view.setHasFixedSize(true);
         //set layout as LinearLayout
         detail_list_view.setLayoutManager(mLayoutManager);
-        add_btn = findViewById(R.id.add_btn);
+        //Set on click listener for buttons to pick up onClick method
         add_btn.setOnClickListener(this);
         back_btn.setOnClickListener(this);
-
+        //Instantiating a new array list
         data_list = new ArrayList<>();
+        //Instantiating a new adapter using the new array list
         adapter = new CustomWorkoutDetailAdapter(context, data_list);
+        //Setting on callback methods for the adapter using each button
         adapter.setOnCallBack(new CustomWorkoutDetailAdapter.OnCallBack() {
+            //onEdit unused method as users cannot edit exercises within a workout
             @Override
             public void onEdit(WorkoutDetailModel model) {
             }
+            //method to remove exercises within workout
             @Override
             public void onDelete(WorkoutDetailModel model) {
-                removeWorkout(model);
+                removeExercise(model);
             }
+            //method to view the exercises within workout
             @Override
             public void onGo(WorkoutDetailModel model) {
                 Intent intent = new Intent(context, WorkoutExeActivity.class);
@@ -85,11 +94,12 @@ public class WorkoutDetailActivity extends BaseActivity {
                 startActivity(intent);
             }
         });
+        //setting the RecyclerView to use the adapter
         detail_list_view.setAdapter(adapter);
-
-        fetch();
+        //calling the read method to read the workout data from firebase
+        read();
     }
-
+    //method to set an event on click of add/back button
     @Override
     public void onClick(View view) {
         super.onClick(view);
@@ -99,7 +109,6 @@ public class WorkoutDetailActivity extends BaseActivity {
             finish();
         }
     }
-
     @Override
     public boolean onSupportNavigateUp() {
         onBackPressed();
@@ -110,28 +119,34 @@ public class WorkoutDetailActivity extends BaseActivity {
         dlg.setListener(new WorkoutAddDialog.Listener() {
             @Override
             public void onCreate(WorkoutDetailModel model) {
-                addDetail(model);
+                addExercise(model);
             }
         });
         dlg.show(getSupportFragmentManager(), "WORK_OUT_ADD");
     }
-    private void fetch() {
+    //method to read the database and fetch the exercises
+    private void read() {
+        //clear the array list
         data_list.clear();
+        //add the exercises within the model workout to the array list
         data_list.addAll(model.getDetail_list());
     }
-    public void addDetail(WorkoutDetailModel detail_model){
+    //Method to add an exercise to the workout
+    public void addExercise(WorkoutDetailModel detail_model){
+        //get the current workout exercise list, and add the new exercise
         model.getDetail_list().add(detail_model);
         DatabaseReference ref = FirebaseDatabase.getInstance().getReference(Params.WORKOUT_KEY).child(auth.getCurrentUser().getUid())
                 .child(model.getId());
+        //Instantiating an object of type HashMap
         Map<String, Object> update_map = new HashMap<>();
+        //updating the list of exercises with the users input exercise
+        //and adding a success listener to tell the user if the process was completed
         update_map.put("detail_list", model.getDetail_list());
-
         refresh.setRefreshing(true);
-
         ref.updateChildren(update_map).addOnSuccessListener(new OnSuccessListener<Void>() {
             public void onSuccess(Void aVoid) {
                 refresh.setRefreshing(false);
-                showMessage("Success to add !");
+                showMessage("Successfully added exercise!");
                 data_list.add(detail_model);
                 adapter.notifyDataSetChanged();
             }
@@ -139,23 +154,25 @@ public class WorkoutDetailActivity extends BaseActivity {
             @Override
             public void onFailure(@NonNull Exception e) {
                 refresh.setRefreshing(false);
-                showMessage("Fail to add !");
+                showMessage("Failed to add exercise!");
             }
         });
     }
-    public void removeWorkout(WorkoutDetailModel detail_model){
+    //Method to remove an exercise from the workout
+    public void removeExercise(WorkoutDetailModel detail_model){
+        //get the current workout exercise list, and remove the selected exercise
         model.getDetail_list().remove(detail_model);
-        DatabaseReference ref = FirebaseDatabase.getInstance().getReference(Params.WORKOUT_KEY).child(auth.getCurrentUser().getUid())
-                .child(model.getId());
+        DatabaseReference ref = FirebaseDatabase.getInstance().getReference(Params.WORKOUT_KEY).child(auth.getCurrentUser().getUid()).child(model.getId());
+        //Instantiating an object of type HashMap
         Map<String, Object> update_map = new HashMap<>();
+        //updating the list of exercises
+        //and adding a success listener to tell the user if the process was completed
         update_map.put("detail_list", model.getDetail_list());
-
         refresh.setRefreshing(true);
-
         ref.updateChildren(update_map).addOnSuccessListener(new OnSuccessListener<Void>() {
             public void onSuccess(Void aVoid) {
                 refresh.setRefreshing(false);
-                showMessage("Success to remove !");
+                showMessage("Successfully removed exercise!");
                 data_list.remove(detail_model);
                 adapter.notifyDataSetChanged();
             }
@@ -163,7 +180,7 @@ public class WorkoutDetailActivity extends BaseActivity {
             @Override
             public void onFailure(@NonNull Exception e) {
                 refresh.setRefreshing(false);
-                showMessage("Fail to remove !");
+                showMessage("Failed to remove exercise!");
             }
         });
     }

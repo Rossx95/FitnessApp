@@ -44,8 +44,6 @@ public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.ViewHold
             holder.weight_view.setText(model.getWeight());
             holder.reps_view.setText(model.getReps());
             holder.start_time_view.setText(model.getStart_time());
-            holder.end_time_view.setText(model.getEnd_time());
-
             holder.history_area.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -68,7 +66,6 @@ public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.ViewHold
         private final LinearLayout history_area;
         private final TextView summary_view;
         private final TextView start_time_view;
-        private final TextView end_time_view;
         private final TextView weight_view;
         private final TextView reps_view;
         public ViewHolder(@NonNull View itemView) {
@@ -76,7 +73,6 @@ public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.ViewHold
             history_area = itemView.findViewById(R.id.history_area);
             summary_view = itemView.findViewById(R.id.summary);
             start_time_view = itemView.findViewById(R.id.start_time);
-            end_time_view = itemView.findViewById(R.id.end_time);
             weight_view = itemView.findViewById(R.id.history_weight);
             reps_view = itemView.findViewById(R.id.history_reps);
         }

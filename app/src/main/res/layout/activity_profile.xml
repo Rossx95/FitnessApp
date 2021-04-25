@@ -54,11 +54,29 @@
                 android:orientation="vertical"
                 android:layout_marginBottom="20dp">
                 <ImageView
+                    android:id="@+id/profileImage"
                     android:layout_width="@dimen/logo_w_h"
                     android:layout_height="@dimen/logo_w_h"
                     android:layout_gravity="center_horizontal"
                     android:layout_marginBottom="30dp"
                     app:srcCompat="@drawable/ic_profile" />
+                <TextView
+                    android:id="@+id/txtemail"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="TextView"
+                    android:textColor="@color/colorWhite"
+                    android:gravity="center" />
+                <Button
+                    android:id="@+id/change_profile"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    android:background="#00FFFFFF"
+                    android:text="@string/action_changeprofile"
+                    android:textColor="@color/colorWhite"
+                    android:textStyle="bold"
+                    app:backgroundTint="#00FFFFFF" />
                 <com.google.android.material.textfield.TextInputLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -88,21 +106,7 @@
                         android:singleLine="true"
                         android:textColor="@color/colorDarkBlue" />
                 </com.google.android.material.textfield.TextInputLayout>
-                <com.google.android.material.textfield.TextInputLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="15dp"
-                    android:textColorHint="@color/colorDarkBlue">
-                    <EditText
-                        android:id="@+id/email"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:hint="@string/email"
-                        android:inputType="textEmailAddress"
-                        android:maxLines="1"
-                        android:singleLine="true"
-                        android:textColor="@color/colorDarkBlue" />
-                </com.google.android.material.textfield.TextInputLayout>
+
                 <com.google.android.material.textfield.TextInputLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -155,6 +159,7 @@
                     android:text="@string/action_update"
                     android:textColor="@color/colorWhite"
                     android:textStyle="bold" />
+
             </LinearLayout>
         </LinearLayout>
     </androidx.core.widget.NestedScrollView>

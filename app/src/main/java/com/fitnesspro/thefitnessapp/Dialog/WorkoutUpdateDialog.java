@@ -17,7 +17,11 @@ import com.fitnesspro.thefitnessapp.R;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+/*
+* A class to create a dialog box to allow users to update the name of a workout
+* */
 public class WorkoutUpdateDialog extends BaseDialog {
+    //Initialising Variables
     ImageView close_btn;
     EditText name_view;
     LinearLayout cancel_btn;
@@ -34,12 +38,10 @@ public class WorkoutUpdateDialog extends BaseDialog {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
     }
-
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
         try{
-
         }catch (Exception e){
             e.getStackTrace();
         }
@@ -47,7 +49,7 @@ public class WorkoutUpdateDialog extends BaseDialog {
     @NonNull
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
-
+        //set the base view for the activity
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext(), R.style.AlertDialogTheme);
         View rootView = LayoutInflater.from(getContext()).inflate(R.layout.dialog_workout_update, null);
         initView(rootView);
@@ -56,17 +58,17 @@ public class WorkoutUpdateDialog extends BaseDialog {
         return builder.create();
     }
     private void initView(View rootView) {
-
+        //initialise variables to features on the page
         close_btn = rootView.findViewById(R.id.close);
         name_view = rootView.findViewById(R.id.name);
         update_btn = rootView.findViewById(R.id.update_btn);
         cancel_btn = rootView.findViewById(R.id.cancel_btn);
-
+        //Set on click listener for buttons to pick up onClick method
         close_btn.setOnClickListener(this);
         update_btn.setOnClickListener(this);
         cancel_btn.setOnClickListener(this);
     }
-
+    //method to set events of various buttons
     public void onClick(View view){
         if(view == close_btn){
             dismiss();
@@ -77,7 +79,9 @@ public class WorkoutUpdateDialog extends BaseDialog {
         }
     }
     private void create(){
+        //grabbing text input by user
         String name = name_view.getText().toString().trim();
+        //Validation to ensure text field isnt empty
         if(TextUtils.isEmpty(name)){
             name_view.setError("Please enter name !");
             return;
@@ -85,6 +89,7 @@ public class WorkoutUpdateDialog extends BaseDialog {
         if(mListener != null){
             mListener.onUpdate(name);
         }
+        //close dialog
         dismiss();
     }
 }

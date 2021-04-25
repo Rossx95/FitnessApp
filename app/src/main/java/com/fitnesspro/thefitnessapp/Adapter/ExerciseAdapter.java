@@ -14,6 +14,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.fitnesspro.thefitnessapp.R;
 import com.fitnesspro.thefitnessapp.models.ExerciseModel;
+import com.fitnesspro.thefitnessapp.models.Params;
+import com.fitnesspro.thefitnessapp.models.ReviewModel;
 
 import java.util.List;
 
@@ -79,5 +81,6 @@ public class ExerciseAdapter extends RecyclerView.Adapter<ExerciseAdapter.ViewHo
     }
     public interface OnCallBack{
         void onDetail(ExerciseModel exercise);
+        void onDelete(ExerciseModel exercise);
     }
 }

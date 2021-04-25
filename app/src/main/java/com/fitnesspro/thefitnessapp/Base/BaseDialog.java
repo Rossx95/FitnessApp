@@ -1,5 +1,6 @@
 package com.fitnesspro.thefitnessapp.Base;
 
+import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -19,7 +20,9 @@ import androidx.fragment.app.DialogFragment;
 public class BaseDialog extends DialogFragment implements View.OnClickListener{
 
     public FirebaseAuth auth;
-
+    public Context context;
+    public String[] permissions = new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE};
+    public final int PERMISSION_CODE = 567;
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);

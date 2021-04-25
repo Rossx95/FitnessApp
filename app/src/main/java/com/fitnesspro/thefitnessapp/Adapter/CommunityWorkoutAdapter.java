@@ -11,6 +11,7 @@ import android.widget.TextView;
 import com.fitnesspro.thefitnessapp.R;
 import com.fitnesspro.thefitnessapp.models.CommunityWorkoutModel;
 import com.fitnesspro.thefitnessapp.models.Params;
+import com.fitnesspro.thefitnessapp.models.UserModel;
 import com.google.firebase.auth.FirebaseAuth;
 
 import java.util.List;
@@ -24,6 +25,8 @@ public class CommunityWorkoutAdapter extends RecyclerView.Adapter<CommunityWorko
     private List<CommunityWorkoutModel> list;
     private CommunityWorkoutAdapter.OnCallBack onCallBack;
     private String user_id;
+    FirebaseAuth fauth;
+    private String test;
 
     public CommunityWorkoutAdapter(Context context, List<CommunityWorkoutModel> list){
         this.context = context;
@@ -54,7 +57,8 @@ public class CommunityWorkoutAdapter extends RecyclerView.Adapter<CommunityWorko
                     holder.delete_btn.setVisibility(View.VISIBLE);
                     holder.edit_btn.setVisibility(View.VISIBLE);
                 }
-            }else{
+            }
+            else{
                 holder.delete_btn.setVisibility(View.VISIBLE);
                 holder.edit_btn.setVisibility(View.VISIBLE);
             }
@@ -62,6 +66,7 @@ public class CommunityWorkoutAdapter extends RecyclerView.Adapter<CommunityWorko
             float rating = model.getRate();
             int review_num = model.getReview_num();
             holder.review_num.setText(review_num + " review(s)");
+            holder.userID.setText("Posted by: "+ model.getEmail());
             if(review_num > 0){
                 float rating_val = rating / review_num;
                 holder.rating_bar.setRating(rating_val);
@@ -96,6 +101,7 @@ public class CommunityWorkoutAdapter extends RecyclerView.Adapter<CommunityWorko
                     }
                 }
             });
+
             holder.review_btn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -123,6 +129,7 @@ public class CommunityWorkoutAdapter extends RecyclerView.Adapter<CommunityWorko
         private final TextView review_num;
         private final TextView review;
         private final RatingBar rating_bar;
+        private final TextView userID;
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             edit_btn = itemView.findViewById(R.id.edit_btn);
@@ -133,6 +140,7 @@ public class CommunityWorkoutAdapter extends RecyclerView.Adapter<CommunityWorko
             review_num = itemView.findViewById(R.id.review_num);
             review = itemView.findViewById(R.id.review);
             rating_bar = itemView.findViewById(R.id.rating);
+            userID = itemView.findViewById(R.id.WorkoutuserID);
         }
     }
     public interface OnCallBack{

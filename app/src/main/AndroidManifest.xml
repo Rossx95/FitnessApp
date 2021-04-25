@@ -21,8 +21,6 @@
             android:screenOrientation="portrait"/>
         <activity android:name=".Activities.User.PresetWorkoutActivity"
             android:screenOrientation="portrait" />
-        <activity android:name=".Activities.ResetPasswordActivity"
-            android:screenOrientation="portrait" />
         <activity android:name=".Activities.User.RegisterActivity"
             android:screenOrientation="portrait"/>
         <activity android:name=".Activities.User.LoginActivity"

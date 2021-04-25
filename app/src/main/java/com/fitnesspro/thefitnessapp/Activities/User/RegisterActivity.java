@@ -28,7 +28,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
 public class RegisterActivity extends BaseActivity {
-
+    //Initialise Variables
     EditText inputFirstName, inputLastName, inputEmail, inputPassword;
     Button btnSignUp;
     ProgressBar progressBar;
@@ -38,19 +38,15 @@ public class RegisterActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        //set the base view for the activity
         setContentView(R.layout.activity_register);
+        //call initView method
         initView();
     }
 
-    @Override
-    protected void onResume() {
-        super.onResume();
-        progressBar.setVisibility(View.GONE);
-    }
-
     private void initView(){
+        //initialise variables to features on the page
         mDatabase = FirebaseDatabase.getInstance().getReference().child(Params.USER_KEY);
-
         btnSignIn = findViewById(R.id.sign_in_button);
         btnSignUp = findViewById(R.id.sign_up_button);
         inputFirstName = findViewById(R.id.firstname);
@@ -59,12 +55,12 @@ public class RegisterActivity extends BaseActivity {
         inputPassword = findViewById(R.id.password);
         progressBar = findViewById(R.id.progressBar);
         btnResetPassword = findViewById(R.id.btn_reset_password);
-
+        //Set on click listener for buttons to pick up onClick method
         btnResetPassword.setOnClickListener(this);
         btnSignIn.setOnClickListener(this);
         btnSignUp.setOnClickListener(this);
     }
-
+    //method to set events of various buttons
     @Override
     public void onClick(View view) {
         super.onClick(view);
@@ -76,11 +72,14 @@ public class RegisterActivity extends BaseActivity {
             signUp();
         }
     }
+    //A method to check the user inputs in the registration fields, if they are
+    //not appropriate, warn the user. Otherwise call the register method
     private void signUp(){
         String firstname = inputFirstName.getText().toString().trim();
         String lastname = inputLastName.getText().toString().trim();
         String email = inputEmail.getText().toString().trim();
         String password = inputPassword.getText().toString().trim();
+        //Validation to ensure fields are completed correctly
         if (TextUtils.isEmpty(firstname)) {
             inputFirstName.setError("Enter first name!");
             return;
@@ -98,15 +97,16 @@ public class RegisterActivity extends BaseActivity {
             return;
         }
         if (password.length() < 6) {
-            showMessageShort("Password too short, enter minimum 6 characters!");
+            inputPassword.setError("Password too short, enter minimum 6 characters!");
             return;
         }
         progressBar.setVisibility(View.VISIBLE);
-        //create user
+        //call the register method taking in the users inputs
         register_user(firstname, lastname, email, password);
     }
-    //-----REGISTERING THE NEW USER------
+    //Method to register the new user, taking various user inputs  for name, email and password
     private void register_user(final String firstname, String lastname, String email, String password) {
+        //firebase ensuring the email and password is valid
         auth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
@@ -114,6 +114,7 @@ public class RegisterActivity extends BaseActivity {
                 if (task.isSuccessful()) {
                     FirebaseUser current_user = FirebaseAuth.getInstance().getCurrentUser();
                     final String uid = current_user.getUid();
+                    //Instantiate an object of type UserModel
                     UserModel user = new UserModel();
                     user.setFirstname(firstname);
                     user.setLastname(lastname);
@@ -130,7 +131,7 @@ public class RegisterActivity extends BaseActivity {
                                 showMessage("Account Created successfully!");
                                 startIntentAsCleanMode(MainActivity.class);
                             } else {
-                                showMessage("Error Creating Account.Please try again!");
+                                inputEmail.setError("This email has already been used for another account!");
                             }
                         }
                     });
@@ -138,13 +139,15 @@ public class RegisterActivity extends BaseActivity {
                 //---ERROR IN ACCOUNT CREATING OF NEW USER---
                 else {
                     progressBar.setVisibility(View.GONE);
-                    showMessage("Error Creating Account.Please try again!");
+                    inputEmail.setError("This email has already been used for another account!");
                 }
             }
         });
     }
-    private void reset(){
+    //method to reset users password
+    private void reset() {
         EditText resetMail = new EditText(context);
+        //Initialising dialog
         AlertDialog.Builder passwordResetDialog = new AlertDialog.Builder(context);
         passwordResetDialog.setTitle("Reset Password?");
         passwordResetDialog.setMessage("Enter your email to reset your password");
@@ -154,6 +157,12 @@ public class RegisterActivity extends BaseActivity {
             public void onClick(DialogInterface dialog, int which) {
                 //extract email and send reset link
                 String mail = resetMail.getText().toString().trim();
+                //if the user does not enter an email, it will deny the user the reset
+                if(mail.isEmpty() || !mail.contains("@")){
+                    showMessage("You did not enter a valid email");
+                    return;
+                }
+                //verifies that the email input is a user in the database
                 auth.sendPasswordResetEmail(mail).addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {
@@ -172,6 +181,12 @@ public class RegisterActivity extends BaseActivity {
             public void onClick(DialogInterface dialog, int which) {
             }
         });
+        //create and show the dialog
         passwordResetDialog.create().show();
+    }
+    @Override
+    protected void onResume() {
+        super.onResume();
+        progressBar.setVisibility(View.GONE);
     }
 }

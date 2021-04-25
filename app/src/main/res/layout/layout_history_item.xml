@@ -43,40 +43,17 @@
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
                     android:layout_marginTop="5dp">
+
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Start Time: "
-                        android:textColor="@android:color/darker_gray"
-                        android:textSize="14sp"
                         android:fontFamily="@font/customregular"
-                        android:gravity="start"/>
+                        android:gravity="start"
+                        android:text="Workout Date:"
+                        android:textColor="@android:color/darker_gray"
+                        android:textSize="14sp" />
                     <TextView
                         android:id="@+id/start_time"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:text=""
-                        android:textColor="@android:color/darker_gray"
-                        android:textSize="13sp"
-                        android:fontFamily="@font/customregular"
-                        android:gravity="end"
-                        android:layout_marginEnd="5dp"/>
-                </LinearLayout>
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal">
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="End Time: "
-                        android:textColor="@android:color/darker_gray"
-                        android:textSize="14sp"
-                        android:fontFamily="@font/customregular"
-                        android:gravity="start"/>
-                    <TextView
-                        android:id="@+id/end_time"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"

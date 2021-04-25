@@ -43,7 +43,14 @@ import java.util.Locale;
 
 import androidx.annotation.NonNull;
 
+/*
+Notes on how to set up this class were taken from
+https://www.youtube.com/watch?v=zPsSUEGDfVY
+https://www.youtube.com/watch?v=NK_-phxyIAM
+https://www.youtube.com/watch?v=0ZSg58AV8r8
+ */
 public class WorkoutExeActivity extends BaseActivity {
+    //Initialising Variables
     WorkoutDetailModel model;
     ImageView back_btn;
     FrameLayout exe_area;
@@ -51,73 +58,73 @@ public class WorkoutExeActivity extends BaseActivity {
     TextView exe_title;
     TextView weight_view;
     TextView reps_view;
-
     LinearLayout log_btn;
     ProgressBar progressBar;
 
+    //Initialising variables required to set up google calendar API
     final int REQUEST_ACCOUNT_PICKER = 1000;
     final int REQUEST_AUTHORIZATION = 1001;
     final int REQUEST_GOOGLE_PLAY_SERVICES = 1002;
-
     GoogleAccountCredential credential;
     final String[] SCOPES = { CalendarScopes.CALENDAR };
     final String PREF_ACCOUNT_NAME = "accountName";
     final HttpTransport transport = AndroidHttp.newCompatibleTransport();
     final JsonFactory jsonFactory = GsonFactory.getDefaultInstance();
-
     Calendar mService;
     DateTime startDateTime;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        //set the base view for the activity
         setContentView(R.layout.activity_workout_exe);
+        //call initView method
         initView();
     }
     private void initView(){
+        //Setting model to an object from a different model to be able to access getters and setters
         model = (WorkoutDetailModel) getIntent().getSerializableExtra("model");
+        //initialise variables to features on the page
         back_btn = findViewById(R.id.back);
         exe_area = findViewById(R.id.exe_area);
         exe_image = findViewById(R.id.exe_image);
         exe_title = findViewById(R.id.title_view);
         weight_view = findViewById(R.id.weight);
         reps_view = findViewById(R.id.reps);
-
         log_btn = findViewById(R.id.log_btn);
         progressBar = findViewById(R.id.progressBar);
-
+        //Set on click listener for buttons to pick up onClick method
         back_btn.setOnClickListener(this);
         log_btn.setOnClickListener(this);
-
-        initValues();
+        //calling method to load exercise logging page
+        loadExerciseToLog();
     }
-    private void initValues(){
+    private void loadExerciseToLog(){
         Glide.with(context)
                 .load(model.getExe().getImage())
                 .into(exe_image);
         exe_title.setText(model.getExe().getTitle());
         weight_view.setText(model.getWeight());
         reps_view.setText(model.getReps());
-
         //get start time
         startDateTime = new DateTime(System.currentTimeMillis());
-
         SharedPreferences settings = getSharedPreferences(context.getPackageName(), Context.MODE_PRIVATE);
-
+        //setting google calendar credentials
         credential = GoogleAccountCredential.usingOAuth2(
                 getApplicationContext(), Arrays.asList(SCOPES))
                 .setBackOff(new ExponentialBackOff())
                 .setSelectedAccountName(settings.getString(PREF_ACCOUNT_NAME, null));
-
         mService = new Calendar.Builder(
                 transport, jsonFactory, credential)
                 .setApplicationName("FitnessApp Android")
                 .build();
-
+        //if the user has not logged into a google account, call the method to ask the user
+        //to log into an account
         if(credential.getSelectedAccountName() == null){
             chooseAccount();
         }
     }
+    //method to set an event on click of back and log button
     @Override
     public void onClick(View view) {
         super.onClick(view);
@@ -127,63 +134,55 @@ public class WorkoutExeActivity extends BaseActivity {
             new LogCaller().execute();
         }
     }
+    //Method to log the exercise into the users history
     private class LogCaller extends AsyncTask<Void, Void, HistoryModel> {
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
             progressBar.setVisibility(View.VISIBLE);
         }
-
         @Override
         protected HistoryModel doInBackground(Void... params) {
             return log();
         }
-
         @Override
         protected void onPostExecute(HistoryModel result) {
             super.onPostExecute(result);
             progressBar.setVisibility(View.GONE);
             if (result != null) {
-                //save model
+                //save into the users history
                 saveHistory(result);
             } else {
                 showMessage("Failed to log to calendar!");
             }
         }
     }
-
+    //Method to log the exercise into the users history
     private HistoryModel log(){
         try{
             //customize event parameters
-            //summary and description and location are able to be customized ...
+            //Set summary, description, weights, reps and time
             String summary = model.getExe().getTitle();
             //added
             String reps = model.getReps();
             String weight = model.getWeight();
             String description = "Complete exercise " + model.getExe().getTitle();
-
-            Event event = new Event()
-                    .setSummary(summary)
-                    .setDescription(description);
-
+            Event event = new Event().setSummary(summary).setDescription(description);
             EventDateTime start = new EventDateTime().setDateTime(startDateTime);
             event.setStart(start);
-
             DateTime endDateTime = new DateTime(System.currentTimeMillis());
             EventDateTime end = new EventDateTime().setDateTime(endDateTime);
             event.setEnd(end);
-
             String calendarId = "primary";
             event = mService.events().insert(calendarId, event).execute();
             String link = event.getHtmlLink();
-
+            //Instantiating new object of HistoryModel class
             HistoryModel model = new HistoryModel();
+            //Setting the model to contain the following inputs
             model.setLink(link);
             model.setSummary(summary);
-            //added
             model.setReps(reps);
             model.setWeight(weight);
-
             model.setStart_time(getTime(startDateTime));
             model.setEnd_time(getTime(endDateTime));
             return model;
@@ -194,10 +193,11 @@ public class WorkoutExeActivity extends BaseActivity {
         }
         return null;
     }
-    //choose google account
+    //Choose google account to log into
     private void chooseAccount() {
         startActivityForResult(credential.newChooseAccountIntent(), REQUEST_ACCOUNT_PICKER);
     }
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -205,6 +205,8 @@ public class WorkoutExeActivity extends BaseActivity {
             case REQUEST_GOOGLE_PLAY_SERVICES:
                 break;
             case REQUEST_ACCOUNT_PICKER:
+                //Code used for the following from stackoverflow
+                // https://stackoverflow.com/questions/31759949/android-google-drive-api-token-error
                 if (resultCode == RESULT_OK && data != null && data.getExtras() != null) {
                     String accountName = data.getStringExtra(AccountManager.KEY_ACCOUNT_NAME);
                     if (accountName != null) {
@@ -215,7 +217,6 @@ public class WorkoutExeActivity extends BaseActivity {
                         editor.commit();
                     }
                 } else if (resultCode == RESULT_CANCELED) {
-
                 }
                 break;
             case REQUEST_AUTHORIZATION:
@@ -224,6 +225,7 @@ public class WorkoutExeActivity extends BaseActivity {
         super.onActivityResult(requestCode, resultCode, data);
     }
 
+    //Method used to save the history item to the database
     private void saveHistory(HistoryModel model){
         if(model == null) return;
         DatabaseReference ref = FirebaseDatabase.getInstance().getReference(Params.HISTORY_KEY).child(auth.getCurrentUser().getUid()).push();
@@ -233,7 +235,7 @@ public class WorkoutExeActivity extends BaseActivity {
         ref.setValue(model).addOnSuccessListener(new OnSuccessListener<Void>() {
             public void onSuccess(Void aVoid) {
                 progressBar.setVisibility(View.GONE);
-                showMessage("Success to log !");
+                showMessage("Successfully logged exercise to your history!");
             }
         }).addOnFailureListener(new OnFailureListener() {
             @Override
@@ -245,7 +247,7 @@ public class WorkoutExeActivity extends BaseActivity {
     }
     private String getTime(DateTime time){
         Date date = new Date(time.getValue());
-        SimpleDateFormat format = new SimpleDateFormat("yyyy MM dd HH:mm:ss", Locale.getDefault());
+        SimpleDateFormat format = new SimpleDateFormat("dd MM yyyy HH:mm:ss", Locale.getDefault());
         return format.format(date);
     }
 }
