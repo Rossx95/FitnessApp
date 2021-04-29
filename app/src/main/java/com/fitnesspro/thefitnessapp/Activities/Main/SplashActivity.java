@@ -35,7 +35,7 @@ public class SplashActivity extends BaseActivity {
     //Method to assess if user is logged in, bring them directly to main page,
     //if not bring them to the login page. If the user is an admin, enable admin rights
     private void startView(){
-    //if a user is logged in, redirect them to the main activity
+        //if a user is logged in, redirect them to the main activity
         if (auth.getCurrentUser() != null) {
             if(auth.getCurrentUser().getEmail().equals("admin@gmail.com")){
                 Params.ADMIN = true;

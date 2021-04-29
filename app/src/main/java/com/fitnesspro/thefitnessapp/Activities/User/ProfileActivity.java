@@ -87,12 +87,12 @@ public class ProfileActivity extends BaseActivity {
             //if successful, load the uploaded image onto the screen for the user
             @Override
             public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-               fileRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
-                   @Override
-                   public void onSuccess(Uri uri) {
-                       Picasso.get().load(uri).into(profileImage);
-                   }
-               });
+                fileRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                    @Override
+                    public void onSuccess(Uri uri) {
+                        Picasso.get().load(uri).into(profileImage);
+                    }
+                });
             }//if it failed to upload, notify the user
         }).addOnFailureListener(new OnFailureListener() {
             @Override

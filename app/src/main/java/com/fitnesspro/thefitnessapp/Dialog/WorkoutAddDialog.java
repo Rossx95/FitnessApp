@@ -38,7 +38,7 @@ import java.util.Locale;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-
+//Number of methods 13
 /*
  * A class to create a dialog box to allow users to add an exercise to a workout
  * */

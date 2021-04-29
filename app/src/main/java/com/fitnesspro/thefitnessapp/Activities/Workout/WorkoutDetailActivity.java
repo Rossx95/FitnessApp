@@ -27,7 +27,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
+//Number of methods 8
 public class WorkoutDetailActivity extends BaseActivity {
     //Initialising Variables
     CustomWorkoutModel model;

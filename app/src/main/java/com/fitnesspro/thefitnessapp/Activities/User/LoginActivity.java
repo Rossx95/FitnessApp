@@ -92,7 +92,7 @@ public class LoginActivity extends BaseActivity {
                 progressBar.setVisibility(View.GONE);
                 if (!task.isSuccessful()) {
                     if (password.length() < 6) {
-                        inputPassword.setError(getString(R.string.minimum_password));
+                        showMessage(getString(R.string.minimum_password));
                     } else {
                         showMessage(getString(R.string.auth_failed));
                     }

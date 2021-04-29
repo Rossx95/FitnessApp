@@ -42,7 +42,7 @@ import java.util.Date;
 import java.util.Locale;
 
 import androidx.annotation.NonNull;
-
+//Number of methods 9
 /*
 Notes on how to set up this class were taken from
 https://www.youtube.com/watch?v=zPsSUEGDfVY
@@ -198,6 +198,8 @@ public class WorkoutExeActivity extends BaseActivity {
         startActivityForResult(credential.newChooseAccountIntent(), REQUEST_ACCOUNT_PICKER);
     }
 
+    //Code used for the following from stackoverflow
+    // https://stackoverflow.com/questions/31759949/android-google-drive-api-token-error
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -205,8 +207,7 @@ public class WorkoutExeActivity extends BaseActivity {
             case REQUEST_GOOGLE_PLAY_SERVICES:
                 break;
             case REQUEST_ACCOUNT_PICKER:
-                //Code used for the following from stackoverflow
-                // https://stackoverflow.com/questions/31759949/android-google-drive-api-token-error
+
                 if (resultCode == RESULT_OK && data != null && data.getExtras() != null) {
                     String accountName = data.getStringExtra(AccountManager.KEY_ACCOUNT_NAME);
                     if (accountName != null) {

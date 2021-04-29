@@ -243,7 +243,7 @@ public class CommunityWorkoutDetailView extends BaseActivity {
         //if the user did not create the workout, this message is displayed
         else{
             showMessage("You didnt create this workout, you cannot modify it!");
-            }
+        }
     }
     //Method to check if a user already has a review
     private void check_Review_Exists(final float rate, final String description, final String userID){

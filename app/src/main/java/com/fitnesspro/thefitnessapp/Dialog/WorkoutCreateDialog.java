@@ -19,7 +19,7 @@ import com.google.firebase.auth.FirebaseAuth;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-
+//Number of methods 8
 /*
  * A class to create a dialog box to allow users to create a workout by inputting a name
  * */

@@ -118,10 +118,10 @@ public class ExerciseListActivity extends BaseActivity {
         add_btn.setOnClickListener(this);
 //        changeImage.setOnClickListener(this);
         refresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-              @Override
-              public void onRefresh() {
-                  refresh.setRefreshing(false);
-              }
+            @Override
+            public void onRefresh() {
+                refresh.setRefreshing(false);
+            }
         });
         //calling the read method to read the workout data from firebase
         read();
@@ -263,7 +263,7 @@ public class ExerciseListActivity extends BaseActivity {
                 @Override
                 public boolean onQueryTextChange(String s) {
                     //once user has input a value, run the search method using that value
-                   search(s);
+                    search(s);
                     return true;
                 }
             });
@@ -313,7 +313,7 @@ public class ExerciseListActivity extends BaseActivity {
                     Intent intent = new Intent(context, ExerciseDetailView.class);
                     intent.putExtra("model", exercise);
                     startActivity(intent);
-                                      }
+                }
 
                 @Override
                 public void onDelete(ExerciseModel exercise) {

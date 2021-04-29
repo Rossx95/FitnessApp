@@ -20,7 +20,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
-
+//Number of methods 8
 /*
  * A class to create a dialog box to allow users to review a workout
  * */

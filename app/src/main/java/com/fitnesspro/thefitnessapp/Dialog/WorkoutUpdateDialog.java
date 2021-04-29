@@ -16,10 +16,10 @@ import com.fitnesspro.thefitnessapp.R;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-
+//Number of methods 8
 /*
-* A class to create a dialog box to allow users to update the name of a workout
-* */
+ * A class to create a dialog box to allow users to update the name of a workout
+ * */
 public class WorkoutUpdateDialog extends BaseDialog {
     //Initialising Variables
     ImageView close_btn;

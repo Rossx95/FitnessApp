@@ -289,7 +289,7 @@ public class CommunityWorkoutActivity extends BaseActivity {
                 //display message if successful
                 showMessage("Successfully deleted workout!");
             }
-        //adding a failure listener to tell the user if the workout failed to be removed
+            //adding a failure listener to tell the user if the workout failed to be removed
         }).addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception e) {
